@@ -6,7 +6,7 @@
 /*   By: cseguier <cseguier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 14:45:20 by cseguier          #+#    #+#             */
-/*   Updated: 2019/01/10 17:29:50 by cseguier         ###   ########.fr       */
+/*   Updated: 2019/01/10 18:08:11 by cseguier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,9 @@ int			get_next_line(int const fd, char **line)
 		*line = strcdup(s, '\n');
 		tmp = ft_strdup(1 + ft_strchr(s, '\n'));
 		free(s);
-		*s = *tmp;
-		free(tmp);
+		s = tmp;
+//		free(tmp);
+		tmp = NULL;
 
 	}
 	if (0 < lu)
