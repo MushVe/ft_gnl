@@ -6,7 +6,7 @@
 /*   By: cseguier <cseguier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 16:36:39 by cseguier          #+#    #+#             */
-/*   Updated: 2019/01/07 16:41:36 by cseguier         ###   ########.fr       */
+/*   Updated: 2019/01/11 16:44:32 by cseguier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int main(int ac, char **av)
 	while (i == 1)
 	{
 		i = get_next_line(fd, &line);
-//		ft_putnbr(i);
+				ft_putnbr(i);
+		//		ft_putstr("\n");
 		if (!i)
 			break;
-//		ft_putstr("\n");
 		ft_putstr(line);
 		ft_putstr("\n");
 	}
