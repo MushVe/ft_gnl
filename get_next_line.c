@@ -6,14 +6,14 @@
 /*   By: cseguier <cseguier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 14:45:20 by cseguier          #+#    #+#             */
-/*   Updated: 2019/01/15 13:00:54 by cseguier         ###   ########.fr       */
+/*   Updated: 2019/01/15 16:04:18 by cseguier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "libft/libft.h"
 
-static char	*join_free(char *s1, char *s2)
+static char		*join_free(char *s1, char *s2)
 {
 	int		i;
 	char	*res;
@@ -40,49 +40,52 @@ static char	*join_free(char *s1, char *s2)
 	return (res);
 }
 
-static char	*strccpy(char *dest, char const *src, char c)
+static char		*strc_dup_cpy(char *dest, char const *src, char c, int id)
 {
-	int	i;
-
-	i = 0;
-	while (src[i] != c)
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-static char	*strcdup(char const *src, char c)
-{
+	int		i;
 	char	*s;
 	char	*res;
 
-	if (!(s = (char*)ft_memalloc((sizeof(char) * (ft_strlen(src) + 1)))))
-		return (0);
-	res = strccpy(s, src, c);
-	return (res);
+	if (id == 1)
+	{
+		i = 0;
+		while (src[i] != c)
+		{
+			dest[i] = src[i];
+			i++;
+		}
+		dest[i] = '\0';
+		return (dest);
+	}
+	if (id == 2)
+	{
+		if (!(s = (char*)ft_memalloc((sizeof(char) * (ft_strlen(src) + 1)))))
+			return (0);
+		res = strc_dup_cpy(s, src, c, 1);
+		return (res);
+	}
+	return (NULL);
 }
 
-int			get_next_line(int const fd, char **line)
+static int		norme2(char **line, char **s)
 {
-	static char	**s;
-	char		*tmp;
-	char		buff[BUFF_SIZE + 1];
-	size_t		lu;
+	char	*tmp;
 
-	if (fd < 0)
+	if (!(*line = strc_dup_cpy(NULL, *s, '\n', 2)))
 		return (-1);
-	if (s == NULL)
-	{
-		if (!(s = (char**)ft_memalloc((sizeof(char*) * 1))))
-			return (-1);
-		if (!(*s = (char*)ft_memalloc((sizeof(char) * 1))))
-			return (-1);
-	}
-	lu = 1;
+	if (!(tmp = ft_strdup(1 + ft_strchr(*s, '\n'))))
+		return (-1);
+	free(*s);
+	*s = tmp;
+	tmp = NULL;
+	return (1);
+}
 
+static ssize_t	norme(char **s, char **line, int fd, char *buff)
+{
+	ssize_t	lu;
+
+	lu = 1;
 	while (!(ft_strchr(*s, '\n')) && lu > 0)
 	{
 		lu = read(fd, buff, BUFF_SIZE);
@@ -98,14 +101,32 @@ int			get_next_line(int const fd, char **line)
 			free(*line);
 			*line = NULL;
 		}
-		*line = strcdup(*s, '\n');
-		tmp = ft_strdup(1 + ft_strchr(*s, '\n'));
-		free(*s);
-		*s = tmp;
-		tmp = NULL;
+		if (!norme2(line, s))
+			return (-1);
 	}
-	if (0 < lu)
+	return (lu);
+}
+
+int				get_next_line(int const fd, char **line)
+{
+	static char	**s;
+	char		buff[BUFF_SIZE + 1];
+	ssize_t		lu;
+
+	if (fd < 0)
+		return (-1);
+	if (s == NULL)
+	{
+		if (!(s = (char**)ft_memalloc((sizeof(char*) * 1))))
+			return (-1);
+		if (!(*s = (char*)ft_memalloc((sizeof(char) * 1))))
+			return (-1);
+	}
+	lu = norme(s, line, fd, buff);
+	if (lu > 0)
 		return (1);
+	if (lu < -1)
+		return (-1);
 	free(*s);
 	free(s);
 	free(*line);
