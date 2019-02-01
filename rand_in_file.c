@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   enfer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cseguier <cseguier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/07 16:36:39 by cseguier          #+#    #+#             */
-/*   Updated: 2019/02/01 09:39:06 by cseguier         ###   ########.fr       */
+/*   Created: 2019/02/01 09:21:51 by cseguier          #+#    #+#             */
+/*   Updated: 2019/02/01 09:37:22 by cseguier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,15 @@
 int main(int ac, char **av)
 {
 	(void)ac;
-	char *line;
-	int i = 1;
-	int fd = open(av[1], O_RDONLY);
-	int fd2 = open(av[2], O_WRONLY);
-	while (i > 0)
+	int size = 1000000;
+	char mdr[1000000] = { 0 };
+	int fd = open(av[1], O_WRONLY);
+
+	for (int i = 0; i < size; i++)
 	{
-		i = get_next_line(fd, &line);
-	//	ft_putnbr(i);
-//		ft_putstr("\n");
-		if (i < 1)
-			break ;
-//		ft_putstr("line > ");
-		write(fd2, line, strlen(line));
-		write(fd2, "\n", 1);
-//		ft_putstr(line);
-//		ft_putstr("\n");
+		mdr[i] = (rand() % 126) + 1;
 	}
+		write(fd, mdr, size);
+
 	return 0;
 }
