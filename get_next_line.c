@@ -6,37 +6,37 @@
 /*   By: cseguier <cseguier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 16:38:31 by cseguier          #+#    #+#             */
-/*   Updated: 2019/01/23 17:41:45 by cseguier         ###   ########.fr       */
+/*   Updated: 2019/01/28 17:16:09 by cseguier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "libft/libft.h"
 
-static char		*join_free(char *s1, char *s2)
+static char		*join_free(char *s, char *buff)
 {
 	int		i;
 	char	*res;
-	int		t1;
-	int		t2;
+	int		ts;
+	int		tbuff;
 
 	i = -1;
-	if (!s1 || !s2)
+	if (!s || !buff)
 		return (NULL);
-	t1 = ft_strlen(s1);
-	t2 = ft_strlen(s2);
-	if (!(res = (char*)ft_memalloc(sizeof(char) * (t1 + t2 + 1))))
+	ts = ft_strlen(s);
+	tbuff = ft_strlen(buff);
+	if (!(res = (char*)ft_memalloc(sizeof(char) * (ts + tbuff + 1))))
 		return (0);
-	while (++i < t1)
-		res[i] = s1[i];
-	while (i < t1 + t2)
+	while (++i < ts)
+		res[i] = s[i];
+	while (i < ts + tbuff)
 	{
-		res[i] = s2[i - t1];
+		res[i] = buff[i - ts];
 		i++;
 	}
 	res[i] = '\0';
-	if (s1)
-		free(s1);
+	if (s)
+		free(s);
 	return (res);
 }
 
@@ -84,22 +84,24 @@ static ssize_t	readfile(char **s, char **line, int fd, char *buff)
 {
 	ssize_t	lu;
 
+	ft_memset(buff, 0, BUFF_SIZE + 1);
 	lu = 1;
 	if (*line)
 	{
 		free(*line);
 		*line = NULL;
 	}
-	while (lu > 0)
+	while (0 < (lu = read(fd, buff, BUFF_SIZE)))
 	{
-		lu = read(fd, buff, BUFF_SIZE);
-		buff[BUFF_SIZE] = '\0';
 		if (!(*s = join_free(*s, buff)))
 			return (-1);
-		ft_memset(buff, 0, BUFF_SIZE);
+		ft_memset(buff, 0, BUFF_SIZE + 1);
 	}
-	if (!copyinline(line, s))
-		return (-1);
+	if (*s)
+	{
+		if (!copyinline(line, s))
+			return (-1);
+	}
 	if (*line)
 		return (1);
 	return (0);

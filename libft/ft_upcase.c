@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_upcase.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cseguier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/06 13:19:51 by cseguier          #+#    #+#             */
-/*   Updated: 2019/01/23 17:40:05 by cseguier         ###   ########.fr       */
+/*   Created: 2018/07/10 09:59:36 by cseguier          #+#    #+#             */
+/*   Updated: 2018/12/05 19:31:30 by cseguier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+char	*ft_upcase(char *str)
+{
+	int i;
 
-# include "libft/libft.h"
-
-# define BUFF_SIZE 100
-
-int	get_next_line(int const fd, char **line);
-
-#endif
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] >= 'a' && str[i] <= 'z')
+			str[i] = str[i] - 32;
+		i++;
+	}
+	return (str);
+}

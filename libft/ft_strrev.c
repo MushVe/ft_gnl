@@ -1,22 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strrev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cseguier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/06 13:19:51 by cseguier          #+#    #+#             */
-/*   Updated: 2019/01/23 17:40:05 by cseguier         ###   ########.fr       */
+/*   Created: 2018/11/30 12:16:10 by cseguier          #+#    #+#             */
+/*   Updated: 2018/11/30 12:28:56 by cseguier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# include "libft/libft.h"
+char	*ft_strrev(char const *str, size_t len)
+{
+	size_t	i;
+	char	*res;
+	char	buff;
 
-# define BUFF_SIZE 100
-
-int	get_next_line(int const fd, char **line);
-
-#endif
+	if (!str)
+		return (NULL);
+	i = 0;
+	buff = '0';
+	if (!(res = ft_strdup(str)))
+		return (NULL);
+	while (len > i)
+	{
+		buff = res[len];
+		res[len] = res[i];
+		res[i] = buff;
+		i++;
+		len--;
+	}
+	return (res);
+}
