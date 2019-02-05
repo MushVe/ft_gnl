@@ -6,7 +6,7 @@
 /*   By: cseguier <cseguier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 16:38:31 by cseguier          #+#    #+#             */
-/*   Updated: 2019/01/28 17:16:09 by cseguier         ###   ########.fr       */
+/*   Updated: 2019/02/05 14:28:50 by cseguier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,19 +64,21 @@ static int		copyinline(char **line, char **s)
 	tmp = NULL;
 	if (ft_strchr(*s, '\n'))
 	{
+		ft_putstr("333\n");
 		if (!(*line = strc_dup_cpy(*s, '\n')))
 			return (0);
 		if (!(tmp = ft_strdup(1 + ft_strchr(*s, '\n'))))
 			return (0);
 	}
-	else if (**s != '\0')
+	else if (*s)
 	{
+		ft_putstr("444\n");
 		if (!(*line = ft_strdup(*s)))
 			return (0);
 	}
+	ft_putstr("555\n");
 	free(*s);
 	*s = tmp;
-	tmp = NULL;
 	return (1);
 }
 
@@ -86,24 +88,23 @@ static ssize_t	readfile(char **s, char **line, int fd, char *buff)
 
 	ft_memset(buff, 0, BUFF_SIZE + 1);
 	lu = 1;
-	if (*line)
-	{
-		free(*line);
-		*line = NULL;
-	}
 	while (0 < (lu = read(fd, buff, BUFF_SIZE)))
 	{
+		ft_putstr("111\n");
 		if (!(*s = join_free(*s, buff)))
 			return (-1);
 		ft_memset(buff, 0, BUFF_SIZE + 1);
 	}
+	if (lu == -1)
+		return (-1);
 	if (*s)
 	{
+		ft_putstr("222\n");
 		if (!copyinline(line, s))
 			return (-1);
-	}
-	if (*line)
 		return (1);
+	}
+	ft_putstr("666\n");
 	return (0);
 }
 
@@ -113,7 +114,7 @@ int				get_next_line(int const fd, char **line)
 	char		buff[BUFF_SIZE + 1];
 	ssize_t		lu;
 
-	if (fd < 0)
+	if (fd < 0 || !line)
 		return (-1);
 	if (s == NULL)
 	{
@@ -122,14 +123,14 @@ int				get_next_line(int const fd, char **line)
 		if (!(*s = (char*)ft_memalloc((sizeof(char) * 1))))
 			return (-1);
 	}
+	ft_putstr("000\n");
 	lu = readfile(s, line, fd, buff);
-	if (*line)
+	ft_putstr("777\n");
+	if (lu > 0)
 		return (1);
 	if (lu < 0)
 		return (-1);
-	free(*s);
-	free(s);
-	free(*line);
-	*line = NULL;
+	ft_memdel((void*)s);
+	ft_memdel((void*)&s);
 	return (0);
 }
